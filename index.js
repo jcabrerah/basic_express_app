@@ -1,26 +1,31 @@
 const express = require('express');
-const http = require('http')
-const client = require('prom-client')
+const prometheus = require('prom-client')
 const app = express();
 
-const register = new client.Registry();
+const register = new prometheus.Registry();
 
-register.setDefaultLabels({
-    app: 'basic_express_app'
+// register.setDefaultLabels({
+//     app: 'basic_express_app'
+// })
+
+prometheus.collectDefaultMetrics({ 
+    app: 'basic_express_aap',
+    prefix: 'node_',
+    timeout: 10000,
+    gcDurationBuckets: [0.001, 0.01, 0.1, 1, 2, 5],
+    register
 })
-
-client.collectDefaultMetrics({ register })
 
 app.get('/', (req, res) => {
     res.send('Hello world good word');    
 });
 
-app.get('/metrics', (req, res) => {
-    res.setHeader('Content-type', register.contentType);
-    res.send(register.metrics())
+app.get('/metrics', async (req, res) => {
+    res.setHeader('Content-Type', register.contentType);
+    res.send(await register.metrics());
 })
 
-app.listen(8080, () => {
+app.listen(3080, () => {
     console.log('Express web app on localhost');
 })
 

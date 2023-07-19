@@ -1,6 +1,6 @@
 const express = require('express');
 const http = require('http')
-const client = require(promt-client)
+const client = require('prom-client')
 const app = express();
 
 const register = new client.Registry();

@@ -8,6 +8,14 @@ register.setDefaultLabels({
     app: 'basic_express_app'
 })
 
+prometheus.collectDefaultMetrics({ 
+    // app: 'basic_express_aap',
+    // prefix: 'node_',
+    // timeout: 10000,
+    // gcDurationBuckets: [0.001, 0.01, 0.1, 1, 2, 5],
+    register
+})
+
 const httpRequestTimer = new prometheus.Histogram({
     name: 'http_request_duration_ms',
     help: 'Duration of HTTP requests in ms',
@@ -16,13 +24,8 @@ const httpRequestTimer = new prometheus.Histogram({
     buckets: [0.1, 5, 15, 50, 100, 200, 300, 400, 500, 1000],
 });
 
-prometheus.collectDefaultMetrics({ 
-    // app: 'basic_express_aap',
-    // prefix: 'node_',
-    // timeout: 10000,
-    // gcDurationBuckets: [0.001, 0.01, 0.1, 1, 2, 5],
-    register
-})
+register.registerMetric(httpRequestTimer);
+
 
 app.get('/', (req, res) => {
     res.send('Hello world good word');    

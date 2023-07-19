@@ -5,7 +5,7 @@ const app = express();
 
 const register = new client.Registry();
 
-register.setDafaultLabels({
+register.setDefaultLabels({
     app: 'basic_express_app'
 })
 
